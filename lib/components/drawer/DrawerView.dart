@@ -103,6 +103,33 @@ class _DrawerViewState extends State<DrawerView> {
     );
   }
 
+  Future<void> doChuckNorris() async {
+    String chuckNorrisJoke = await DataHolder().httpAdmin.fetchChuckNorrisJoke();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Información'),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Broma de Chuck Norris: $chuckNorrisJoke'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text('Aceptar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -161,11 +188,11 @@ class _DrawerViewState extends State<DrawerView> {
               //fin apis
               //apis
               optionTile(
-                fAction: () {
+                fAction: () { doChuckNorris();
                 },
                 isCollapsed: _isCollapsed,
                 icon: Icons.ac_unit_outlined,
-                title: 'API1',
+                title: 'API2 - Chuck Norris',
                 infoCount: 0,
               ),
               const Divider(color: Colors.grey),
