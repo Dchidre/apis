@@ -130,6 +130,97 @@ class _DrawerViewState extends State<DrawerView> {
     );
   }
 
+  void doSearchPost() {
+    TextEditingController _searchController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Buscar Post por Título'),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Ingrese el título a buscar',
+                  contentPadding: EdgeInsets.all(16.0),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  String searchValue = _searchController.text.trim();
+                  if (searchValue.isNotEmpty) {
+                    Navigator.of(context).pop(); // Cerrar el diálogo de búsqueda
+
+                    List<Map<String, dynamic>> searchResults =
+                    await DataHolder().fbAdmin.searchPostsByTitle(searchValue);
+
+                    if (searchResults.isNotEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Resultados de la Búsqueda'),
+                            content: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                for (var result in searchResults)
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('ID del Post: ${result['idPost']}'),
+                                      Text('Título: ${result['title']}'),
+                                      Text('Usuario: ${result['sUserName']}'),
+                                      // Agrega aquí otros campos que desees mostrar
+                                    ],
+                                  ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text('Aceptar'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Resultados de la Búsqueda'),
+                            content: Text('No se encontraron posts con el título proporcionado.'),
+                            actions: [
+                              TextButton(
+                                child: Text('Aceptar'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
+                },
+                child: Text('Buscar'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -199,11 +290,11 @@ class _DrawerViewState extends State<DrawerView> {
               //fin apis
               //apis
               optionTile(
-                fAction: () {
+                fAction: () {doSearchPost();
                 },
                 isCollapsed: _isCollapsed,
                 icon: Icons.ac_unit_outlined,
-                title: 'API1',
+                title: 'Buscar post',
                 infoCount: 0,
               ),
               const Divider(color: Colors.grey),
