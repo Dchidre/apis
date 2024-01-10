@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:exa_chircea/Singletone/HttpAdmin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../FbObjects/fbPost.dart';
@@ -15,6 +16,7 @@ class DataHolder {
   late String sPostTitle;
   late PlatformAdmin platformAdmin;
   FirebaseAdmin fbAdmin = FirebaseAdmin();
+  HttpAdmin httpAdmin = HttpAdmin();
 
   //methods
   void savePostInCache() async {

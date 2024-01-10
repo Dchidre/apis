@@ -5,6 +5,9 @@ import 'package:exa_chircea/components/drawer/userInfo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../Singletone/DataHolder.dart';
+import '../../Singletone/HttpAdmin.dart';
+import '../../Singletone/HttpAdmin.dart';
 import 'header.dart';
 
 class DrawerView extends StatefulWidget {
@@ -16,6 +19,89 @@ class DrawerView extends StatefulWidget {
 
 class _DrawerViewState extends State<DrawerView> {
   bool _isCollapsed = false;
+
+  void _showPokemonInfoDialog(BuildContext context, Map<String, dynamic> pokemonData) {
+    List<String> abilities = [];
+
+    // Verificar si el diccionario contiene la clave 'abilities'
+    if (pokemonData.containsKey('abilities')) {
+      // Obtener la lista de habilidades
+      List<dynamic> abilitiesList = pokemonData['abilities'];
+
+      // Extraer los nombres de las habilidades
+      abilities = abilitiesList
+          .map<String>((ability) => ability['ability']['name'])
+          .toList();
+    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Información'),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Nombre: ${pokemonData['name']}'),
+              Text('Habilidades: ${abilities.join(', ')}'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text('Aceptar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void doApiPokemon() {
+    TextEditingController _pokemonNameController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Buscar Pokémon'),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _pokemonNameController,
+                decoration: InputDecoration(labelText: 'Nombre del Pokémon'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text('Buscar'),
+              onPressed: () async {
+                String pokemonName = _pokemonNameController.text.trim().toLowerCase();
+                if (pokemonName.isNotEmpty) {
+                  Navigator.of(context).pop(); // Cerrar el diálogo de búsqueda
+
+                  Map<String, dynamic> pokemonData =
+                  await DataHolder().httpAdmin.fetchPokemonData(pokemonName);
+                  _showPokemonInfoDialog(context, pokemonData);
+                }
+              },
+            ),
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 
   @override
@@ -63,6 +149,38 @@ class _DrawerViewState extends State<DrawerView> {
                 infoCount: 0,
               ),
               const Divider(color: Colors.grey),
+              //apis
+              optionTile(
+                fAction: () {doApiPokemon();},
+                isCollapsed: _isCollapsed,
+                icon: Icons.ac_unit_outlined,
+                title: 'API1 - Pokemon',
+                infoCount: 0,
+              ),
+              const Divider(color: Colors.grey),
+              //fin apis
+              //apis
+              optionTile(
+                fAction: () {
+                },
+                isCollapsed: _isCollapsed,
+                icon: Icons.ac_unit_outlined,
+                title: 'API1',
+                infoCount: 0,
+              ),
+              const Divider(color: Colors.grey),
+              //fin apis
+              //apis
+              optionTile(
+                fAction: () {
+                },
+                isCollapsed: _isCollapsed,
+                icon: Icons.ac_unit_outlined,
+                title: 'API1',
+                infoCount: 0,
+              ),
+              const Divider(color: Colors.grey),
+              //fin apis
               const Spacer(),
               optionTile(
                 fAction: () {

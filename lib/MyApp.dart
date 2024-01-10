@@ -30,7 +30,7 @@ class exaApp extends StatelessWidget {
         routes: {
           '/initialView':(context) => InitialView(),
           '/splashView':(context) => SplashView(),
-          '/homeView':(context) => WebHomeView(),
+          '/homeView':(context) => PhoneHomeView(),
         },
           initialRoute: '/homeView',
       );
