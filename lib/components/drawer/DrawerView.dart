@@ -180,7 +180,7 @@ class _DrawerViewState extends State<DrawerView> {
               optionTile(
                 fAction: () {doApiPokemon();},
                 isCollapsed: _isCollapsed,
-                icon: Icons.ac_unit_outlined,
+                icon: Icons.tag_faces_rounded,
                 title: 'API1 - Pokemon',
                 infoCount: 0,
               ),
@@ -191,7 +191,7 @@ class _DrawerViewState extends State<DrawerView> {
                 fAction: () { doChuckNorris();
                 },
                 isCollapsed: _isCollapsed,
-                icon: Icons.ac_unit_outlined,
+                icon: Icons.face_outlined,
                 title: 'API2 - Chuck Norris',
                 infoCount: 0,
               ),

@@ -52,4 +52,19 @@ class FirebaseAdmin {
     // Update only the specified fields in Firestore
     await postRef.update(postData);
     }
+
+  Future<List<Map<String, dynamic>>> searchPostsByTitle(String searchValue) async {
+    QuerySnapshot querySnapshot = await db
+        .collection('Posts')
+        .where('title', isGreaterThanOrEqualTo: searchValue)
+        .get();
+
+    return querySnapshot.docs
+        .where((doc) =>
+    (doc['title'] as String).contains(searchValue) ||
+        (doc['sUserName'] as String).contains(searchValue))
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  }
+
 }

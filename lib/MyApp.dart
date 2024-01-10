@@ -31,8 +31,12 @@ class exaApp extends StatelessWidget {
           '/initialView':(context) => InitialView(),
           '/splashView':(context) => SplashView(),
           '/homeView':(context) => PhoneHomeView(),
+          '/settingsView':(context) => SettingsView(),
+          '/createPostView':(context) => CreatePostView(),
+          '/changeProfileView':(context) => EditProfileView(),
+          '/postView':(context) => PhonePostView(),
         },
-          initialRoute: '/homeView',
+        initialRoute: '/initialView',
       );
     }
 
